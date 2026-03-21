@@ -8,25 +8,71 @@
 </head>
 <body>
 
+<div id="splash-screen">
+    <div class="splash-content">
+        <h1 class="splash-logo">EN LO DE OTTO</h1>
+        <p class="splash-sub">Verdulería & Almacén</p>
+        <div class="splash-loader">
+            <div></div><div></div><div></div><div></div>
+        </div>
+    </div>
+</div>
+
 <header>
     <h1 class="logo">EN LO DE OTTO</h1>
 </header>
 
-<nav class="nav-tabs">
-    <button class="tab-btn active" onclick="filtrarCategoria('Frutas', this)">Frutas</button>
-    <button class="tab-btn" onclick="filtrarCategoria('Verduras', this)">Verduras</button>
-    <button class="tab-btn" onclick="filtrarCategoria('Cervezas', this)">Cervezas</button>
-    <button class="tab-btn" onclick="filtrarCategoria('Almacen', this)">Almacén</button>
-</nav>
+<div id="section-productos" class="fade-in">
+    <nav class="nav-tabs">
+        <button class="tab-btn active" onclick="filtrarCategoria('Frutas', this)">Frutas</button>
+        <button class="tab-btn" onclick="filtrarCategoria('Verduras', this)">Verduras</button>
+        <button class="tab-btn" onclick="filtrarCategoria('Cervezas', this)">Cervezas</button>
+        <button class="tab-btn" onclick="filtrarCategoria('Almacen', this)">Almacén</button>
+    </nav>
 
-<div class="container">
-    <h2 id="current-category-title" class="section-title">Frutas</h2>
-    <div class="products-grid" id="products-container"></div>
+    <div class="container">
+        <h2 id="current-category-title" class="section-title">Frutas</h2>
+        <div class="products-grid" id="products-container"></div>
+    </div>
+</div>
+
+<div id="section-entrega" style="display: none;">
+    <div class="container-entrega fade-in">
+        <h2 class="section-title">¿Cómo recibís tu pedido?</h2>
+        
+        <div id="opciones-metodo" class="delivery-options">
+            <button class="delivery-card" onclick="prepararEnvio()">
+                <span class="delivery-icon">🏠</span>
+                <span class="delivery-text">Envío a Domicilio</span>
+            </button>
+            <button class="delivery-card" onclick="finalizarPedido('Retiro en Sucursal')">
+                <span class="delivery-icon">🏪</span>
+                <span class="delivery-text">Retiro en Sucursal</span>
+            </button>
+        </div>
+
+        <div id="form-direccion" style="display: none;">
+            <div class="gps-wrapper">
+                <p class="gps-instruction">Necesitamos tu ubicación exacta para el envío:</p>
+                <button id="btn-obtener-gps" class="btn-gps-grande" onclick="obtenerGps()">
+                    <span class="gps-icon">📍</span>
+                    <span id="txt-gps">Presioná aquí para enviar mi ubicación</span>
+                </button>
+                <button id="btn-enviar-final" class="btn-confirmar-envio" style="display: none;" onclick="validarYEnviar()">
+                    <span class="delivery-text" style="color: #000;">Confirmar y enviar pedido</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="back-wrapper">
+            <button class="btn-volver" onclick="volverAlMenu()">⬅ Volver a elegir productos</button>
+        </div>
+    </div>
 </div>
 
 <div class="cart-footer">
     <button id="btn-vaciar" onclick="vaciarCarrito()" title="Vaciar Carrito">🗑</button>
-    <div id="btn-pedido" onclick="enviarPedido()">
+    <div id="btn-pedido" onclick="mostrarOpcionesEntrega()">
         <span>Confirmar Pedido</span>
         <span id="total-general">$0.00</span>
     </div>

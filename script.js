@@ -1,12 +1,6 @@
-// --- LÓGICA SPLASH ---
 window.addEventListener('load', () => {
     const splash = document.getElementById('splash-screen');
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(()=>{}, ()=>{}, {timeout: 1000});
-    }
-    setTimeout(() => {
-        splash.classList.add('hidden');
-    }, 2500);
+    setTimeout(() => { splash.classList.add('hidden'); }, 2500);
 });
 
 const productos = [
@@ -85,6 +79,7 @@ function mostrarOpcionesEntrega() {
     if (document.getElementById('total-general').innerText === '$0.00') return alert("Tu carrito está vacío.");
     document.getElementById('section-productos').style.display = 'none';
     document.getElementById('section-entrega').style.display = 'block';
+    window.scrollTo(0,0);
 }
 
 function prepararEnvio() {
@@ -94,13 +89,24 @@ function prepararEnvio() {
 
 function obtenerGps() {
     const txt = document.getElementById('txt-gps');
+    
+    // Opciones recomendadas para iOS (Alta precisión)
+    const opciones = { enableHighAccuracy: true, timeout: 8000, maximumAge: 0 };
+
+    txt.innerText = "⏳ Capturando ubicación...";
+
     navigator.geolocation.getCurrentPosition(
         (pos) => {
-            ubicacionGps = `http://maps.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
+            // Formato de link compatible con todos los mapas
+            ubicacionGps = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
             txt.innerText = "✅ Ubicación capturada";
             document.getElementById('btn-enviar-final').style.display = "block";
         },
-        () => { alert("Activá tu GPS."); }
+        (error) => {
+            alert("Error: Por favor activá el GPS y permití el acceso en Safari.");
+            txt.innerText = "❌ Error de ubicación";
+        },
+        opciones
     );
 }
 
@@ -115,11 +121,7 @@ function finalizarPedido(metodo, ubi = "") {
     let texto = `🏪 *PEDIDO - EN LO DE OTTO*\n📦 *METODO:* ${metodo}\n`;
     if (ubi !== "") texto += `📍 *MAPA:* ${ubi}\n`;
     texto += `---------------------------------\n`;
-    productos.forEach(p => {
-        if (carrito[p.id] > 0) {
-            texto += `• ${p.nombre} x${carrito[p.id]}\n`;
-        }
-    });
+    productos.forEach(p => { if (carrito[p.id] > 0) texto += `• ${p.nombre} x${carrito[p.id]}\n`; });
     texto += `---------------------------------\n💰 *TOTAL: ${document.getElementById('total-general').innerText}*`;
     window.open(`https://wa.me/543751246552?text=${encodeURIComponent(texto)}`, '_blank');
 }
